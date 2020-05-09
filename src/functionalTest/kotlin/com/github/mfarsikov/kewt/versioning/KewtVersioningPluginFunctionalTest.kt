@@ -23,6 +23,6 @@ class KewtVersioningPluginFunctionalTest {
         runner.withProjectDir(projectDir)
         val result = runner.build();
 
-        assertTrue(result.output.contains("Hello from plugin 'com.github.mfarsikov.kewt.versioning.greeting'"))
+        assertTrue(result.output.contains("rst"))
     }
 }
