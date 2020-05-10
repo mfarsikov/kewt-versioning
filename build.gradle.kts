@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  //  implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
 
     runtimeOnly("org.jetbrains.kotlin:kotlin-script-runtime")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
@@ -50,5 +50,12 @@ publishing {
             version = project.version as String
             from(components["java"])
         }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
     }
 }
