@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.70"
     id("maven-publish")
 }
-group = "com.github.mfarsikov"
-version = "0.0.1-SNAPSHOT"
+group = "kewt-versioning"
+version = "0.0.3-SNAPSHOT"
 repositories {
     jcenter()
 }
@@ -12,14 +12,17 @@ repositories {
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  //  implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
 
+    runtimeOnly("org.jetbrains.kotlin:kotlin-script-runtime")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    implementation(kotlin("script-runtime"))
 }
 
 gradlePlugin {
     val greeting by plugins.creating {
-        id = "com.github.mfarsikov.kewt.versioning.greeting"
+        id = "kewt-versioning"
         implementationClass = "com.github.mfarsikov.kewt.versioning.KewtVersioningPlugin"
     }
 }

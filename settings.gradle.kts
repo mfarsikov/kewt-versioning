@@ -1,1 +1,1 @@
-rootProject.name = "kewt-versioning"
+rootProject.name = "kewt-versioning.gradle.plugin"
