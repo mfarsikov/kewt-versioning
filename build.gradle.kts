@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 group = "kewt-versioning"
-version = "0.0.3-SNAPSHOT"
+version = "0.1.0-SNAPSHOT"
 repositories {
     jcenter()
 }
@@ -21,9 +21,9 @@ dependencies {
 }
 
 gradlePlugin {
-    val greeting by plugins.creating {
+    val kewtVersioning by plugins.creating {
         id = "kewt-versioning"
-        implementationClass = "com.github.mfarsikov.kewt.versioning.KewtVersioningPlugin"
+        implementationClass = "com.github.mfarsikov.kewt.versioning.plugin.KewtVersioningPlugin"
     }
 }
 
