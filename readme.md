@@ -6,12 +6,12 @@ Project versioning using Git tags
 `gradle.kts`
 ```kotlin
 plugins {
-    id("kewt-versioning") version "0.0.3-SNAPSHOT"
+    id("kewt-versioning") version "0.1.0"
 }
 version = kewtVersioning.version
 ```
 
-##Tasks
+## Tasks
 * `release` create next tag in Git according to branch configuration (actually it is a `currentVersion` without a 
 `-SNAPSHOT`)
 * `currentVersion` prints current version
