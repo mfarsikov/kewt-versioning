@@ -1,9 +1,10 @@
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.3.70"
+    id("com.gradle.plugin-publish") version "0.11.0"
     id("maven-publish")
 }
-group = "kewt-versioning"
+group = "com.github.mfarsikov.kewt-versioning"
 version = "0.1.0"
 repositories {
     jcenter()
@@ -22,7 +23,8 @@ dependencies {
 
 gradlePlugin {
     val kewtVersioning by plugins.creating {
-        id = "kewt-versioning"
+        id = "com.github.mfarsikov.kewt-versioning"
+        displayName = "Kewt versioning"
         implementationClass = "com.github.mfarsikov.kewt.versioning.plugin.KewtVersioningPlugin"
     }
 }
@@ -58,4 +60,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+pluginBundle {
+    website = "https://github.com/mfarsikov/kewt-versioning"
+    vcsUrl = "https://github.com/mfarsikov/kewt-versioning"
+    description = "Gradle plugin for versioning using Git tags"
+    tags = listOf("git", "versioning")
 }
