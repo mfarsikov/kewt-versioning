@@ -3,9 +3,16 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.70"
     id("com.gradle.plugin-publish") version "0.11.0"
     id("maven-publish")
+    id("com.github.mfarsikov.kewt-versioning") version "0.1.0"
 }
+
 group = "com.github.mfarsikov.kewt-versioning"
-version = "0.1.1-SNAPSHOT"
+version = kewtVersioning.version
+
+kewtVersioning {
+    prefix = "v"
+}
+
 repositories {
     jcenter()
 }
@@ -49,7 +56,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = project.group as String
             artifactId = project.name
-            version = project.version as String
+            version = project.version.toString()
             from(components["java"])
         }
     }
