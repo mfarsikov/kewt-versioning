@@ -6,7 +6,7 @@ Project versioning using Git tags
 `gradle.kts`
 ```kotlin
 plugins {
-    id("kewt-versioning") version "0.1.0"
+    id("com.github.mfarsikov.kewt-versioning") version "0.1.0"
 }
 version = kewtVersioning.version
 ```

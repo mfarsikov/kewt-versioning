@@ -25,7 +25,7 @@ class GitReader(
                 .map { it.name.substringAfter("refs/tags/") }
 
         val commitTags = allTags.filter { it.objectId == commitId }.map { it.name.substringAfter("refs/tags/") }
-        val isDirty = !git.status().call().isClean
+        val isDirty = git.status().call().isClean.not()
 
         return GitStatus(
                 branch = git.repository.branch,
@@ -38,10 +38,11 @@ class GitReader(
         }
     }
 
-    private fun allCommitIds(childCommitId: ObjectId, revWalk: RevWalk): List<ObjectId> = revWalk
-            .parseCommit(childCommitId)
-            .parents
-            .flatMap { allCommitIds(it.id, revWalk) } + revWalk.parseCommit(childCommitId).id
+    private fun allCommitIds(childCommitId: ObjectId, revWalk: RevWalk): List<ObjectId> {
+        val commit = revWalk.parseCommit(childCommitId)
+        return commit.parents
+                .flatMap { allCommitIds(it.id, revWalk) } + commit.id
+    }
 
     fun tag(tagName: String) {
         git.tag().setName(tagName).setAnnotated(false).call().also {
