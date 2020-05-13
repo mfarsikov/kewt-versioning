@@ -35,7 +35,9 @@ open class ReleaseTagTask @Inject constructor(val type: ReleaseType) : DefaultTa
 
     @TaskAction
     fun releaseTag() {
-        versionPlugin.release(type)
+        if (project.extensions.findByType(KewtVersioningExtension::class.java)!!.releaseTaskEnabled) {
+            versionPlugin.release(type)
+        }
     }
 }
 

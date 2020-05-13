@@ -8,15 +8,14 @@ import java.io.File
 
 open class KewtVersioningExtension(project: Project) {
 
-    var gitPath = File("./")
-    var prefix = "version"
+    var gitPath = project.rootDir
+    var prefix = "v"
     var separator = "-"
+    var releaseTaskEnabled: Boolean = true
 
     var branches: MutableList<BranchConfig> = mutableListOf(BranchConfig())
 
     val version = VersionHolder(project)
-
-
 }
 
 open class BranchConfig {
@@ -37,5 +36,3 @@ open class BranchConfig {
         "${version.currentVersion}${branchName}${snapshot}${dirty}${sha}"
     }
 }
-
-

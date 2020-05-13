@@ -11,6 +11,7 @@ class GitReader(
 ) {
     private val logger = LoggerFactory.getLogger(GitReader::class.java)
     private val git = Git.open(gitPath)
+    private val tagPrefix = "refs/tags/"
 
     fun status(): GitStatus {
         val commitId = git.repository.resolve("HEAD")
@@ -22,9 +23,9 @@ class GitReader(
 
         val branchTags = allTags
                 .filter { it.objectId in commitIds }
-                .map { it.name.substringAfter("refs/tags/") }
+                .map { it.name.substringAfter(tagPrefix) }
 
-        val commitTags = allTags.filter { it.objectId == commitId }.map { it.name.substringAfter("refs/tags/") }
+        val commitTags = allTags.filter { it.objectId == commitId }.map { it.name.substringAfter(tagPrefix) }
         val isDirty = git.status().call().isClean.not()
 
         return GitStatus(
@@ -45,8 +46,12 @@ class GitReader(
     }
 
     fun tag(tagName: String) {
-        git.tag().setName(tagName).setAnnotated(false).call().also {
-            println("Tag created: ${it.name}")
+        if (git.tagList().call().any { it.name == "$tagPrefix$tagName" }) {
+            println("Tag $tagName already exists. Have another gradle submodule just created it? If so, the release task can be turned of for this sub module")
+        } else {
+            git.tag().setName(tagName).setAnnotated(false).call().also {
+                println("Tag created: ${it.name.substringAfter(tagPrefix)}")
+            }
         }
     }
 }
