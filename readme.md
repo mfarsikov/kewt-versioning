@@ -3,10 +3,10 @@
 Project versioning using Git tags
 
 ## Quick start
-`gradle.kts`
+`build.gradle.kts`
 ```kotlin
 plugins {
-    id("com.github.mfarsikov.kewt-versioning") version "0.1.0"
+    id("com.github.mfarsikov.kewt-versioning") version "0.2.0"
 }
 version = kewtVersioning.version
 ```
@@ -23,9 +23,10 @@ Patch).
 `build.gradle.kts`
 ```kotlin
 kewtVersioning {
-    gitPath = File("./")
-    prefix = "version"
+    gitPath = project.rootDir
+    prefix = "v"
     separator = "-"
+    releaseTaskEnabled = true
 
     branches = mutableListOf(
         BranchConfig().apply{
@@ -36,10 +37,11 @@ kewtVersioning {
     )
 }
 ```
-* `gitPath` - path to `.git` folder. Default is current directory `gitPath=File("./")`.
-* `prefix` and `separator` - are used for Git tags. By default `prefix="version"` and `separator="-"`. Tags look like 
+* `gitPath` - path to `.git` folder. Default is current directory `gitPath=project.rootDir`.
+* `prefix` and `separator` - are used for Git tags. By default `prefix="v"` and `separator="-"`. Tags look like 
 this: `version-0.0.1`. Submodules can use different tags to have independent versioning. 
-* `branches` - per branch configuration. By default this list has configuration for single branch (master).
+* `releaseTaskEnabled` allows turning off release task for current submodule.
+* `branches` - per branch configuration. By default, this list has configuration for single branch (master).
   * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex())`. Hint: to avoid a lot 
   of escape symbols use triple double-quotes in Kotlin
   * `incrementer` - default incrementer for the matched branch. Default vaalue is `Incrementer.Minor`. Could be Major, Minor, Patch. Each branch could have its own
