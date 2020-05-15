@@ -4,7 +4,6 @@ import com.github.mfarsikov.kewt.versioning.git.GitReader
 import com.github.mfarsikov.kewt.versioning.plugin.BranchConfig
 import com.github.mfarsikov.kewt.versioning.plugin.KewtVersioningExtension
 import com.github.mfarsikov.kewt.versioning.plugin.ReleaseType
-import org.slf4j.LoggerFactory
 
 class VersionCalculator(
         private val config: KewtVersioningExtension
@@ -17,8 +16,9 @@ class VersionCalculator(
         return stringifier(currentVersion).replace("/", "-")
     }
 
-    private fun brachConfigFor(branchName:String): BranchConfig {
-        return config.branches.first { branchConfig -> branchConfig.regexes.any { it.matches(branchName) } }
+    private fun brachConfigFor(branchName: String): BranchConfig {
+        return config.branches.firstOrNull { branchConfig -> branchConfig.regexes.any { it.matches(branchName) } }
+                ?: throw RuntimeException("kewtVersioning: there is no matching regex for branch: $branchName, among: ${config.branches.flatMap { it.regexes }}")
     }
 
     fun currentVersion(): DetailedVersion {

@@ -13,7 +13,13 @@ open class KewtVersioningExtension(project: Project) {
     var separator = "-"
     var releaseTaskEnabled: Boolean = true
 
-    var branches: MutableList<BranchConfig> = mutableListOf(BranchConfig())
+    var branches: MutableList<BranchConfig> = mutableListOf(
+            BranchConfig(),
+            BranchConfig().apply {
+                regexes = mutableListOf(".*".toRegex())
+                stringify = stringify(useSha = false)
+            }
+    )
 
     val version = VersionHolder(project)
 }

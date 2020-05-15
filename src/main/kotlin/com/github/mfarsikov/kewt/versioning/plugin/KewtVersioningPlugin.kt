@@ -4,6 +4,7 @@ import com.github.mfarsikov.kewt.versioning.version.VersionCalculator
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
@@ -29,7 +30,10 @@ open class CurrentVersionTask : DefaultTask() {
     }
 }
 
-open class ReleaseTagTask @Inject constructor(val type: ReleaseType) : DefaultTask() {
+open class ReleaseTagTask @Inject constructor(
+        @get:Input
+        val type: ReleaseType
+) : DefaultTask() {
 
     private val versionPlugin = VersionCalculator(project.extensions.getByType(KewtVersioningExtension::class.java))
 

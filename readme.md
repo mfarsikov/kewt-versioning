@@ -41,10 +41,11 @@ kewtVersioning {
 * `prefix` and `separator` - are used for Git tags. By default `prefix="v"` and `separator="-"`. Tags look like 
 this: `version-0.0.1`. Submodules can use different tags to have independent versioning. 
 * `releaseTaskEnabled` allows turning off release task for current submodule.
-* `branches` - per branch configuration. By default, this list has configuration for single branch (master).
+* `branches` - per branch configuration. By default, this list has two configurations: 1) matching master branch; 
+2) matching rest of branches.
   * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex())`. Hint: to avoid a lot 
   of escape symbols use triple double-quotes in Kotlin
-  * `incrementer` - default incrementer for the matched branch. Default vaalue is `Incrementer.Minor`. Could be Major, Minor, Patch. Each branch could have its own
+  * `incrementer` - default incrementer for the matched branch. Default value is `Incrementer.Minor`. Could be Major, Minor, Patch. Each branch could have its own
    default version increment strategy. Master and feature branches could increment their minor versions (0.1.0 -> 0.2.0).
    Release and fix branches could increment patch versions (0.1.0 -> 0.1.1) 
   * `stringify` - version string configuration. Version name could include branch name, snapshot sign, dirty sign and 
