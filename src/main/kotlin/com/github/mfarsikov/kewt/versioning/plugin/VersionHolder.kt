@@ -11,15 +11,6 @@ import java.io.Serializable
  * Actual calculation is triggered by toString()
  *
  */
-//class VersionHolder(project: Project) {
-//    private val version by lazy {
-//        VersionCalculator(project.extensions.getByType(KewtVersioningExtension::class.java))
-//                .currentVersionString()
-//    }
-//
-//    override fun toString() = version
-//}
-//
 
 class VersionHolder(private val project: Project) : Serializable {
     private var version: String? = null
@@ -35,7 +26,7 @@ class VersionHolder(private val project: Project) : Serializable {
     @Synchronized
     override fun toString(): String {
         if (version == null) {
-            version = VersionCalculator(project.extensions.getByType(KewtVersioningExtension::class.java))
+            version = KewtVersioningPlugin.calculator(project)
                     .currentVersionString()
         }
         return version!!

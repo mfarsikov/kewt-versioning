@@ -1,5 +1,6 @@
 package com.github.mfarsikov.kewt.versioning.plugin
 
+import com.github.mfarsikov.kewt.versioning.git.GitReader
 import com.github.mfarsikov.kewt.versioning.version.VersionCalculator
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
@@ -18,15 +19,36 @@ class KewtVersioningPlugin : Plugin<Project> {
         project.tasks.register("releasePatch", ReleaseTagTask::class.java, ReleaseType.PATCH)
         project.tasks.register("release", ReleaseTagTask::class.java, ReleaseType.DEFAULT)
     }
+
+    companion object {
+        fun calculator(project: Project): VersionCalculator {
+            val config = project.extensions.getByType(KewtVersioningExtension::class.java)
+
+            val git = GitReader(
+                    gitPath = config.gitPath,
+                    remoteName = config.remoteName,
+                    user = resolveEnv(config.userName),
+                    password = resolveEnv(config.password)
+            )
+            return VersionCalculator(
+                    config,
+                    git
+            )
+        }
+
+        private fun resolveEnv(s: String): String {
+            val regex = "\\\$\\{(.*)}".toRegex()
+            return regex.find(s)?.groupValues?.get(1)?.let { System.getenv(it) } ?: s
+        }
+    }
 }
 
 open class CurrentVersionTask : DefaultTask() {
 
-    private val versionPlugin = VersionCalculator(project.extensions.getByType(KewtVersioningExtension::class.java))
-
     @TaskAction
     fun currentVersion() {
-        println("version: ${versionPlugin.currentVersionString()}")
+        val versionCalculator = KewtVersioningPlugin.calculator(project)
+        println("version: ${versionCalculator.currentVersionString()}")
     }
 }
 
@@ -35,12 +57,10 @@ open class ReleaseTagTask @Inject constructor(
         val type: ReleaseType
 ) : DefaultTask() {
 
-    private val versionPlugin = VersionCalculator(project.extensions.getByType(KewtVersioningExtension::class.java))
-
     @TaskAction
     fun releaseTag() {
         if (project.extensions.findByType(KewtVersioningExtension::class.java)!!.releaseTaskEnabled) {
-            versionPlugin.release(type)
+            KewtVersioningPlugin.calculator(project).release(type)
         }
     }
 }

@@ -6,9 +6,9 @@ import com.github.mfarsikov.kewt.versioning.plugin.KewtVersioningExtension
 import com.github.mfarsikov.kewt.versioning.plugin.ReleaseType
 
 class VersionCalculator(
-        private val config: KewtVersioningExtension
+        private val config: KewtVersioningExtension,
+        private val gitReader: GitReader
 ) {
-    private val gitReader = GitReader(config.gitPath)
 
     fun currentVersionString(): String {
         val currentVersion = currentVersion()
@@ -37,7 +37,7 @@ class VersionCalculator(
                 lastSpecifiedVersion = semanticVersion,
                 incrementer = if (isSnapshot || status.isDirty) branchTypeIncrementer else Incrementer.NoOp,
                 branchName = status.branch,
-                isSnapshot = isSnapshot,
+                isSnapshot = isSnapshot || status.isDirty,
                 isDirty = status.isDirty,
                 sha = status.sha
         )
