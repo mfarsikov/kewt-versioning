@@ -19,24 +19,40 @@ Ignores branch configurations (`releaseMajor` increases major version even if fo
 Patch).
 
 ## Configuration
+This is default configuration. It includes two pre-configured branches: `master` and all other (`.*`).
+Order does matter. First matched config will be used.
 `build.gradle.kts`
 ```kotlin
 kewtVersioning {
-    gitPath = project.rootDir
-    prefix = "v"
-    separator = "-"
-    remoteName = "origin"
-    userName = "\${GITHUB_USER_NAME}"
-    password = "\${GITHUB_PASSWORD}"
-    releaseTaskEnabled = true
-
-    branches = mutableListOf(
-        BranchConfig().apply{
-                regexes = mutableListOf("master".toRegex())
-                incrementer = Incrementer.Minor
-                stringify = smartVersionStringifier(useSha = false, useBranch = false)
-        }       
-    )
+    gitPath = project.rootDir  // default
+    prefix = "v" // default
+    separator = "-" // default
+    remoteName = "origin" // default
+    userName = "\${GITHUB_USER_NAME}" // default
+    password = "\${GITHUB_PASSWORD}" // default
+    releaseTaskEnabled = true // default
+    branches {
+        clear()
+        add {
+            regexes = mutableListOf("master".toRegex())
+            incrementer = Incrementer.Minor // default
+            stringify { // defaults below
+                useBranch = false  // by default: true
+                useSnapshot = true // default
+                useDirty = true // default
+                useSha = false  // by default: null
+                useTimestamp = false // by default: null
+                timeZone = ZoneOffset.systemDefault() // Default
+            }
+        }
+        add {
+            regexes = mutableListOf(".*".toRegex())
+            stringify {
+                useTimestamp = false
+                useSha = false
+            }
+        }
+    }
 }
 ```
 * `gitPath` - path to `.git` folder. Default is current directory `gitPath=project.rootDir`.
@@ -57,7 +73,7 @@ this: `version-0.0.1`. Submodules can use different tags to have independent ver
   commit SHA signature and timestamp. There is a builder `smartVersionStringifier(useBranch, useSnapshot, useDirty, useSha, useTimestamp, timeZone)`, but if it is not 
   enough the `stringify` property is of `(DetailedVersion) -> String` type, so **implementation could be provided in place**. 
 
-### smartVersionStringifier
+### Stringify
 Parameters:
 * `useBranch` if true (default) version includes branch name
 * `useSnapshot` if true (default) and current commit is not tagged by version tag, then version includes `-SNAPSHOT` suffix
@@ -70,7 +86,7 @@ Examples for configurations and output (SHA is shortened for brevity)
 
 |                                         | Released                                                  | Snapshot                                                                  | Dirty                                                                          |
 |---------                                |--------------                                             |-----------------------------------------------------------                |--------------------------------------------------------------------------------|
-| defaults                                | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`|
+| default                                 | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`|
 | `useBranch = false`                     | `0.4.0`                                                   | `0.4.0-SNAPSHOT-dbef6a`                                                   | `0.4.0-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`       |
 | `useSnapshot = false`                   | `0.4.0-master`                                            | `0.4.0-master-dbef6a`                                                     | `0.4.0-master-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`         |
 | `useDirty = false`                      | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |

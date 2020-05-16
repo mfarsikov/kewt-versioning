@@ -1,6 +1,7 @@
 package com.github.mfarsikov.kewt.versioning.plugin
 
 import com.github.mfarsikov.kewt.versioning.git.GitReader
+import com.github.mfarsikov.kewt.versioning.version.Incrementer
 import com.github.mfarsikov.kewt.versioning.version.VersionCalculator
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
@@ -12,6 +13,36 @@ import javax.inject.Inject
 class KewtVersioningPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create("kewtVersioning", KewtVersioningExtension::class.java, project)
+
+        // Default config
+        project.extensions.getByType(KewtVersioningExtension::class.java).apply {
+            gitPath = project.rootDir
+            prefix = "v"
+            separator = "-"
+            remoteName = "origin"
+            userName = "\${GITHUB_USER_NAME}"
+            password = "\${GITHUB_PASSWORD}"
+            releaseTaskEnabled = true
+            branches {
+                add {
+                    regexes = mutableListOf("master".toRegex())
+                    incrementer = Incrementer.Minor
+                    stringify {
+                        useBranch = false
+                        useTimestamp = false
+                        useSha = false
+                    }
+                }
+                add {
+                    regexes = mutableListOf(".*".toRegex())
+                    incrementer = Incrementer.Minor
+                    stringify {
+                        useTimestamp = false
+                        useSha = false
+                    }
+                }
+            }
+        }
 
         project.tasks.register("currentVersion", CurrentVersionTask::class.java)
         project.tasks.register("releaseMajor", ReleaseTagTask::class.java, ReleaseType.MAJOR)
