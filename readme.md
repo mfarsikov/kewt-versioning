@@ -21,7 +21,8 @@ Patch).
 ## Configuration
 This is default configuration. It includes two pre-configured branches: `master` and all other (`.*`).
 Order does matter. First matched config will be used.
-`build.gradle.kts`
+
+`build.gradle.kts`:
 ```kotlin
 kewtVersioning {
     gitPath = project.rootDir  // default
@@ -55,15 +56,15 @@ kewtVersioning {
     }
 }
 ```
-* `gitPath` - path to `.git` folder. Default is current directory `gitPath=project.rootDir`.
+* `gitPath` - path to `.git` folder. Default is project root `gitPath=project.rootDir`.
 * `prefix` and `separator` - are used for Git tags. By default `prefix="v"` and `separator="-"`. Tags look like 
-this: `version-0.0.1`. Submodules can use different tags to have independent versioning. 
-* `rmeoteName` remote repository name. Default is `"origin"`. To prevent pushing tags to remote could be reset to `null`
+this: `v-0.0.1`. Submodules can use different tags to have independent versioning. 
+* `remoteName` remote repository name. Default is `"origin"`. To prevent pushing tags to remote could be reset to `null`
 * `userName` and `password` used for HTTPS connection to remote repository. If value has prefix `${` and postfix `}` (string in Kotlin `"\${MY_PWD}"`) it will be resolved from environment variables.
  Could contain plain values (highly not recommended). 
 * `releaseTaskEnabled` allows turning off release task for current submodule.
-* `branches` - per branch configuration. By default, this list has two configurations: 1) matching master branch; 
-2) matching rest of branches.
+* `branches` - per branch configuration. By default, this list has two configurations: first matches master branch, the 
+second matches rest of branches.
   * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex())`. Hint: to avoid a lot 
   of escape symbols use triple double-quotes in Kotlin
   * `incrementer` - default incrementer for the matched branch. Default value is `Incrementer.Minor`. Could be Major, Minor, Patch. Each branch could have its own
@@ -72,8 +73,14 @@ this: `version-0.0.1`. Submodules can use different tags to have independent ver
   * `stringify` - version string configuration. Version name could include branch name, snapshot sign, dirty sign, 
   commit SHA signature and timestamp. There is a builder `smartVersionStringifier(useBranch, useSnapshot, useDirty, useSha, useTimestamp, timeZone)`, but if it is not 
   enough the `stringify` property is of `(DetailedVersion) -> String` type, so **implementation could be provided in place**. 
+  Like:
+  ```kotlin
+  stringify = { version: DetailedVersion -> "here-could-be-your-prefix-${version.sha}"}
+  ``` 
 
 ### Stringify
+This block is responsible for generation string version, that will be used in gradle script.
+
 Parameters:
 * `useBranch` if true (default) version includes branch name
 * `useSnapshot` if true (default) and current commit is not tagged by version tag, then version includes `-SNAPSHOT` suffix
@@ -84,7 +91,7 @@ Parameters:
 
 Examples for configurations and output (SHA is shortened for brevity)
 
-|                                         | Released                                                  | Snapshot                                                                  | Dirty                                                                          |
+|                                         | Released (the tag is present on current commit)           | Snapshot (current commit is ahead of tag)                                 | Dirty (uncommitted changes)                                                                         |
 |---------                                |--------------                                             |-----------------------------------------------------------                |--------------------------------------------------------------------------------|
 | default                                 | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`|
 | `useBranch = false`                     | `0.4.0`                                                   | `0.4.0-SNAPSHOT-dbef6a`                                                   | `0.4.0-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`       |
