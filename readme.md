@@ -6,7 +6,7 @@ Project versioning using Git tags with type safe Gradle Kotlin DSL.
 `build.gradle.kts` (Kotlin)
 ```kotlin
 plugins {
-    id("com.github.mfarsikov.kewt-versioning") version "0.2.0"
+    id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
 }
 version = kewtVersioning.version
 ```                                   
@@ -14,7 +14,7 @@ version = kewtVersioning.version
 `build.gradle` (Groovy)
 ```groovy
 plugins {
-    id 'com.github.mfarsikov.kewt-versioning' version '0.2.0'
+    id 'com.github.mfarsikov.kewt-versioning' version '0.6.0'
 }
 version = kewtVersioning.version
 ```        
