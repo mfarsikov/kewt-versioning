@@ -2,11 +2,11 @@ package com.github.mfarsikov.kewt.versioning.version
 
 import com.github.mfarsikov.kewt.versioning.git.GitReader
 import com.github.mfarsikov.kewt.versioning.plugin.BranchConfig
-import com.github.mfarsikov.kewt.versioning.plugin.KewtVersioningExtension
+import com.github.mfarsikov.kewt.versioning.plugin.KewtConfiguration
 import com.github.mfarsikov.kewt.versioning.plugin.ReleaseType
 
 class VersionCalculator(
-        private val config: KewtVersioningExtension,
+        private val config: KewtConfiguration,
         private val gitReader: GitReader
 ) {
 
@@ -27,11 +27,15 @@ class VersionCalculator(
 
         val branchConfig = brachConfigFor(status.branch)
 
-        val semanticVersion = version(status.branchTags) ?: SemanticVersion(0, 1, 0)
+        val semanticVersion = version(status.branchTags) ?: SemanticVersion(0, 0, 0)
 
         val isSnapshot = version(status.commitTags) == null
 
-        val branchTypeIncrementer = branchConfig.incrementer
+        val branchTypeIncrementer = when (branchConfig.incrementer) {
+            com.github.mfarsikov.kewt.versioning.plugin.Incrementer.MINOR -> Incrementer.Minor
+            com.github.mfarsikov.kewt.versioning.plugin.Incrementer.MAJOR -> Incrementer.Major
+            com.github.mfarsikov.kewt.versioning.plugin.Incrementer.PATCH -> Incrementer.Patch
+        }
 
         return DetailedVersion(
                 lastSpecifiedVersion = semanticVersion,

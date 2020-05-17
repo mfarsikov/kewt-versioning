@@ -1,15 +1,23 @@
 # Kewt versioning Gradle plugin
 
-Project versioning using Git tags
+Project versioning using Git tags with type safe Gradle Kotlin DSL.
 
 ## Quick start
-`build.gradle.kts`
+`build.gradle.kts` (Kotlin)
 ```kotlin
 plugins {
     id("com.github.mfarsikov.kewt-versioning") version "0.2.0"
 }
 version = kewtVersioning.version
-```
+```                                   
+
+`build.gradle` (Groovy)
+```groovy
+plugins {
+    id 'com.github.mfarsikov.kewt-versioning' version '0.2.0'
+}
+version = kewtVersioning.version
+```        
 
 ## Tasks
 * `release` create next tag in Git according to branch configuration.
@@ -22,9 +30,11 @@ Patch).
 This is default configuration. It includes two pre-configured branches: `master` and all other (`.*`).
 Order does matter. First matched config will be used.
 
-`build.gradle.kts`:
+`build.gradle.kts` (Kotlin):
 ```kotlin
-kewtVersioning {
+import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
+
+kewtVersioning.configuration {
     gitPath = project.rootDir  // default
     prefix = "v" // default
     separator = "-" // default
@@ -36,22 +46,59 @@ kewtVersioning {
         clear()
         add {
             regexes = mutableListOf("master".toRegex())
-            incrementer = Incrementer.Minor // default
-            stringify { // defaults below
-                useBranch = false  // by default: true
-                useSnapshot = true // default
-                useDirty = true // default
-                useSha = false  // by default: null
-                useTimestamp = false // by default: null
+            incrementer = Incrementer.MINOR // default
+            stringify = stingifier(
+                useBranch = false,  // by default: true
+                useSnapshot = true, // default
+                useDirty = true, // default
+                useSha = false,  // by default: null
+                useTimestamp = false, // by default: null
                 timeZone = ZoneOffset.systemDefault() // Default
-            }
+            )
         }
         add {
             regexes = mutableListOf(".*".toRegex())
-            stringify {
-                useTimestamp = false
+            stringify = stingifier(
+                useTimestamp = false,
                 useSha = false
-            }
+            )
+        }
+    }
+}
+```
+
+`build.gradle` (Groovy):
+```groovy
+import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
+
+kewtVersioning.groovyConfigurationDsl {
+    gitPath = project.rootDir  // default
+    prefix = 'v' // default
+    separator = '-' // default
+    remoteName = 'origin' // default
+    userName = '${GITHUB_USER_NAME}' // default
+    password = '${GITHUB_PASSWORD}' // default
+    releaseTaskEnabled = true // default
+    branches {
+        clear()
+        add {
+            regexes = [~'master']
+            incrementer = Incrementer.MINOR // default
+            stringify = stringifier([
+                    useBranch: false,  // by default: true
+                    useSnapshot: true, // default
+                    useDirty: true, // default
+                    useSha: false,  // by default: null
+                    useTimestamp: false, // by default: null
+                    useUtc: false //Default
+            ])
+        }
+        add {
+            regexes = [~'.*']
+            stringify = stringifier([
+                    useTimestamp: false,
+                    useSha: false
+            ])
         }
     }
 }
@@ -78,8 +125,8 @@ second matches rest of branches.
   stringify = { version: DetailedVersion -> "here-could-be-your-prefix-${version.sha}"}
   ``` 
 
-### Stringify
-This block is responsible for generation string version, that will be used in gradle script.
+### Stringifier
+This function is responsible for creating string version generator, that will be used in gradle script.
 
 Parameters:
 * `useBranch` if true (default) version includes branch name

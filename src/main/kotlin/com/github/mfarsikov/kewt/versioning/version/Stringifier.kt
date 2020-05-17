@@ -10,25 +10,19 @@ object Stringifier {
      * Use timestamp only if is dirty. Otherwise the commit itself has a timestamp.
      */
     fun smartVersionStringifier(
-            params: StringifierParams
+            useBranch: Boolean = true,
+            useSnapshot: Boolean = true,
+            useDirty: Boolean = true,
+            useSha: Boolean? = null,
+            useTimestamp: Boolean? = null,
+            timeZone: ZoneId = ZoneOffset.systemDefault()
     ): (DetailedVersion) -> String = { version ->
-        params.run {
-            val branchName = version.branchName.takeIf { useBranch }?.let { "-$it" } ?: ""
-            val snapshot = if (version.isSnapshot && useSnapshot) "-SNAPSHOT" else ""
-            val dirty = if (version.isDirty && useDirty) "-dirty" else ""
-            val sha = version.sha.takeIf { version.isSnapshot && useSha != false || useSha == true }?.let { "-$it" }
-                    ?: ""
-            val timestamp = if (version.isDirty && useTimestamp != false || useTimestamp == true) "-${ZonedDateTime.now(timeZone)}".replace(":", "-") else ""
-            "${version.currentVersion}${branchName}${snapshot}${sha}${dirty}${timestamp}"
-        }
+        val branchName = version.branchName.takeIf { useBranch }?.let { "-$it" } ?: ""
+        val snapshot = if (version.isSnapshot && useSnapshot) "-SNAPSHOT" else ""
+        val dirty = if (version.isDirty && useDirty) "-dirty" else ""
+        val sha = version.sha.takeIf { version.isSnapshot && useSha != false || useSha == true }?.let { "-$it" }
+                ?: ""
+        val timestamp = if (version.isDirty && useTimestamp != false || useTimestamp == true) "-${ZonedDateTime.now(timeZone)}".replace(":", "-") else ""
+        "${version.currentVersion}${branchName}${snapshot}${sha}${dirty}${timestamp}"
     }
 }
-
-data class StringifierParams(
-        val useBranch: Boolean = true,
-        val useSnapshot: Boolean = true,
-        val useDirty: Boolean = true,
-        val useSha: Boolean? = null,
-        val useTimestamp: Boolean? = null,
-        val timeZone: ZoneId = ZoneOffset.systemDefault()
-)
