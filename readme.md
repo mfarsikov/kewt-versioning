@@ -1,23 +1,36 @@
 # Kewt versioning Gradle plugin
+inspired by [Axion release plugin](https://github.com/allegro/axion-release-plugin)
 
 Project versioning using Git tags with type safe Gradle Kotlin DSL.
 
+![gradlePluginPortal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/mfarsikov/kewt-versioning/com.github.mfarsikov.kewt-versioning.gradle.plugin/maven-metadata.xml.svg?label=gradle%20plugin%20portal&style=flat-square)
+
 ## Quick start
-`build.gradle.kts` (Kotlin)
+<details open>
+<summary>Kotlin</summary>
+
+`build.gradle.kts`
+
 ```kotlin
 plugins {
     id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
 }
 version = kewtVersioning.version
 ```                                   
+</details>
 
-`build.gradle` (Groovy)
+<details>
+<summary>Groovy</summary>
+
+`build.gradle`
+
 ```groovy
 plugins {
     id 'com.github.mfarsikov.kewt-versioning' version '0.6.0'
 }
 version = kewtVersioning.version
 ```        
+</details>
 
 ## Tasks
 * `release` create next tag in Git according to branch configuration.
@@ -30,7 +43,10 @@ Patch).
 This is default configuration. It includes two pre-configured branches: `master` and all other (`.*`).
 Order does matter. First matched config will be used.
 
-`build.gradle.kts` (Kotlin):
+<details open>
+<summary>Kotlin</summary>
+`build.gradle.kts`:
+
 ```kotlin
 import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
@@ -66,8 +82,13 @@ kewtVersioning.configuration {
     }
 }
 ```
+</details>
 
-`build.gradle` (Groovy):
+<details>
+<summary>Groovy</summary>
+
+`build.gradle`:
+
 ```groovy
 import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
@@ -103,6 +124,8 @@ kewtVersioning.groovyConfigurationDsl {
     }
 }
 ```
+</details>
+
 * `gitPath` - path to `.git` folder. Default is project root `gitPath=project.rootDir`.
 * `prefix` and `separator` - are used for Git tags. By default `prefix="v"` and `separator="-"`. Tags look like 
 this: `v-0.0.1`. Submodules can use different tags to have independent versioning. 
