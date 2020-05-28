@@ -1,9 +1,10 @@
+![gradlePluginPortal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/mfarsikov/kewt-versioning/com.github.mfarsikov.kewt-versioning.gradle.plugin/maven-metadata.xml.svg?label=gradle%20plugin%20portal&style=flat-square&color=blue)
+<img src="misc/kotlin-logo.svg" alt="drawing" width="20"/>
+
 # Kewt versioning Gradle plugin
 inspired by [Axion release plugin](https://github.com/allegro/axion-release-plugin)
 
 Project versioning using Git tags with type safe Gradle Kotlin DSL.
-
-![gradlePluginPortal](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/mfarsikov/kewt-versioning/com.github.mfarsikov.kewt-versioning.gradle.plugin/maven-metadata.xml.svg?label=gradle%20plugin%20portal&style=flat-square)
 
 ## Quick start
 <details open>
@@ -159,7 +160,10 @@ Parameters:
 * `useTimestamp` if null (default) version includes timestamp if it is dirty. If true version always includes timestamp
 * `timeZone` time zone used in timestamp. Default value is system default. Most likely alternative is `jata.time.ZoneOffset.UTC`
 
-Examples for configurations and output (SHA is shortened for brevity)
+<details>
+<summary>Examples for configurations and output</summary> 
+
+(SHA is shortened for brevity)
 
 |                                         | Released (the tag is present on current commit)           | Snapshot (current commit is ahead of tag)                                 | Dirty (uncommitted changes)                                                                         |
 |---------                                |--------------                                             |-----------------------------------------------------------                |--------------------------------------------------------------------------------|
@@ -170,3 +174,8 @@ Examples for configurations and output (SHA is shortened for brevity)
 | `useSha = true`                         | `0.4.0-master-dbef6a`                                     | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
 | `useTimestamp = true`                   | `0.4.0-master-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
 | `useTimestamp = false, useSha = false`  | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT`                                                   | `0.4.0-master-SNAPSHOT-dirty`                                                  |
+</details>
+
+### Usage example
+* Kewt versioning plugin is versioned by kewt versioning plugin (see `build.gradle.kts`)
+* Using in multiproject build: https://github.com/mfarsikov/kewt

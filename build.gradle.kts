@@ -1,3 +1,5 @@
+import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
+
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
@@ -7,6 +9,34 @@ plugins {
 }
 
 group = "com.github.mfarsikov.kewt-versioning"
+kewtVersioning {
+    configuration {
+        branches {
+            clear()
+            add {
+                regexes = mutableListOf("master".toRegex())
+                incrementer = Incrementer.MINOR
+                stringify = stringifier(useBranch = false, useSha = false, useTimestamp = false)
+            }
+            add {
+                regexes = mutableListOf("fix/.*".toRegex())
+                incrementer = Incrementer.PATCH
+                stringify = stringifier(useSha = false, useTimestamp = false)
+            }
+            add {
+                regexes = mutableListOf(".*".toRegex())
+                incrementer = Incrementer.MINOR
+                stringify = { version ->
+                    stringifier(
+                            useBranch = version.isSnapshot,
+                            useSha = false,
+                            useTimestamp = false
+                    )(version)
+                }
+            }
+        }
+    }
+}
 version = kewtVersioning.version
 
 repositories {
@@ -71,3 +101,5 @@ pluginBundle {
     description = "Gradle plugin for versioning using Git tags"
     tags = listOf("git", "versioning")
 }
+project.ext["gradle.publish.key"] = System.getenv("GRADLE_PUBLISH_KEY")
+project.ext["gradle.publish.secret"] = System.getenv("GRADLE_PUBLISH_SECRET")
