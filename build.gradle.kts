@@ -2,7 +2,7 @@ import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 plugins {
     `java-gradle-plugin`
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.10"
     id("com.gradle.plugin-publish") version "0.11.0"
     id("maven-publish")
     id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
@@ -44,14 +44,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
-
-    runtimeOnly("org.jetbrains.kotlin:kotlin-script-runtime")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    implementation(kotlin("script-runtime"))
 }
 
 gradlePlugin {

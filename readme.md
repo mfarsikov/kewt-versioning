@@ -17,7 +17,7 @@ plugins {
     id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
 }
 version = kewtVersioning.version
-```                                   
+```
 </details>
 
 <details>
