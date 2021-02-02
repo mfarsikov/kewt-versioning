@@ -34,7 +34,7 @@ class GitReader(
         val isDirty = git.status().call().isClean.not()
 
         return GitStatus(
-                branch = git.repository.branch,
+                branch = git.repository.branch.takeIf { it != commitId.name  },
                 branchTags = branchTags,
                 isDirty = isDirty,
                 commitTags = commitTags,
@@ -63,7 +63,7 @@ class GitReader(
         }
     }
 
-    fun pushToRemote(tagName: String) {
+    private fun pushToRemote(tagName: String) {
         try {
             git.push()
                     .setRemote(remoteName)

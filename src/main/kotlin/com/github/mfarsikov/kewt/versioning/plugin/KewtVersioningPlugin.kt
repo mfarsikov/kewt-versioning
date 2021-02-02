@@ -1,6 +1,7 @@
 package com.github.mfarsikov.kewt.versioning.plugin
 
 import com.github.mfarsikov.kewt.versioning.git.GitReader
+import com.github.mfarsikov.kewt.versioning.plugin.configDsl.BranchConfigListBlock
 import com.github.mfarsikov.kewt.versioning.version.VersionCalculator
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,6 +20,7 @@ class KewtVersioningPlugin : Plugin<Project> {
                 userName = "\${GITHUB_USER_NAME}"
                 password = "\${GITHUB_PASSWORD}"
                 releaseTaskEnabled = true
+                mainBranch = "master"
                 branches {
 
                     add {
@@ -78,7 +80,7 @@ class KewtVersioningPlugin : Plugin<Project> {
         }
     }
 
-    fun release(project: Project, type: ReleaseType) {
+    private fun release(project: Project, type: ReleaseType) {
         if (project.extensions.findByType(KewtVersioningExtension::class.java)!!.configuration.releaseTaskEnabled) {
             calculator(project).release(type)
         }

@@ -6,26 +6,26 @@ import com.github.mfarsikov.kewt.versioning.plugin.KewtConfiguration
 import com.github.mfarsikov.kewt.versioning.plugin.ReleaseType
 
 class VersionCalculator(
-        private val config: KewtConfiguration,
-        private val gitReader: GitReader
+    private val config: KewtConfiguration,
+    private val gitReader: GitReader
 ) {
 
     fun currentVersionString(): String {
         val currentVersion = currentVersion()
-        val stringifier = brachConfigFor(currentVersion.branchName).stringify
-        return stringifier(currentVersion).replace("/", "-")
+        val stringifier = brachConfigFor(currentVersion.branchName ?: "").stringify
+        return stringifier(currentVersion).replace('/', '-')
     }
 
     private fun brachConfigFor(branchName: String): BranchConfig {
         return config.branches.firstOrNull { branchConfig -> branchConfig.regexes.any { it.matches(branchName) } }
-                ?: throw RuntimeException("kewtVersioning: there is no matching regex for branch: $branchName, among: ${config.branches.flatMap { it.regexes }}")
+            ?: throw RuntimeException("kewtVersioning: there is no matching regex for branch: $branchName, among: ${config.branches.flatMap { it.regexes }}")
     }
 
     fun currentVersion(): DetailedVersion {
 
         val status = gitReader.status()
 
-        val branchConfig = brachConfigFor(status.branch)
+        val branchConfig = brachConfigFor(status.branch ?: "")
 
         val semanticVersion = version(status.branchTags) ?: SemanticVersion(0, 0, 0)
 
@@ -38,20 +38,19 @@ class VersionCalculator(
         }
 
         return DetailedVersion(
-                lastSpecifiedVersion = semanticVersion,
-                incrementer = if (isSnapshot || status.isDirty) branchTypeIncrementer else Incrementer.NoOp,
-                branchName = status.branch,
-                isSnapshot = isSnapshot || status.isDirty,
-                isDirty = status.isDirty,
-                sha = status.sha
+            lastSpecifiedVersion = semanticVersion,
+            incrementer = if (isSnapshot || status.isDirty) branchTypeIncrementer else Incrementer.NoOp,
+            branchName = status.branch,
+            isSnapshot = isSnapshot || status.isDirty,
+            isDirty = status.isDirty,
+            sha = status.sha
         )
     }
 
     private fun version(tags: List<String>): SemanticVersion? = tags
-            .filter { it.startsWith(config.prefix + config.separator) }
-            .map { extractVersion(it.substringAfter(config.prefix + config.separator)) }
-            .max()
-
+        .filter { it.startsWith(config.prefix + config.separator) }
+        .map { extractVersion(it.substringAfter(config.prefix + config.separator)) }
+        .maxOrNull()
 
     fun release(releaseType: ReleaseType) {
 
@@ -75,8 +74,8 @@ class VersionCalculator(
     }
 
     private fun extractVersion(version: String): SemanticVersion =
-            version.split(".")
-                    .map { it.toInt() }
-                    .let { SemanticVersion(it[0], it[1], it[2]) }
+        version.split(".")
+            .map { it.toInt() }
+            .let { SemanticVersion(it[0], it[1], it[2]) }
 
 }

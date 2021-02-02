@@ -34,7 +34,7 @@ version = kewtVersioning.version
 </details>
 
 ## Tasks
-* `release` create next tag in Git according to branch configuration.
+* `release` create next tag in Git (according to branch configuration) and pushes it to `remoteName = "origin"` remote repository.
 * `currentVersion` prints current version.
 * `releaseMajor`, `releaseMinor`,`releasePatch` create new tag in git increasing appropriate version. 
 Ignores branch configurations (`releaseMajor` increases major version even if for current branch default incrementer is 
