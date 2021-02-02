@@ -44,14 +44,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.7.0.202003110725-r")
-
-    runtimeOnly("org.jetbrains.kotlin:kotlin-script-runtime")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    implementation(kotlin("script-runtime"))
 }
 
 gradlePlugin {
