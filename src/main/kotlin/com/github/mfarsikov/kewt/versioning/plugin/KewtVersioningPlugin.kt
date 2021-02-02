@@ -20,7 +20,6 @@ class KewtVersioningPlugin : Plugin<Project> {
                 userName = "\${GITHUB_USER_NAME}"
                 password = "\${GITHUB_PASSWORD}"
                 releaseTaskEnabled = true
-                mainBranch = "master"
                 branches {
 
                     add {
