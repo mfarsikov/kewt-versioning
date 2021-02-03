@@ -44,10 +44,16 @@ class GitReader(
         }
     }
 
-    private fun allCommitIds(childCommitId: ObjectId, revWalk: RevWalk): List<ObjectId> {
+    private fun allCommitIds(
+        childCommitId: ObjectId,
+        revWalk: RevWalk,
+        visited: MutableSet<ObjectId> = mutableSetOf()
+    ): List<ObjectId> {
+        visited += childCommitId
         val commit = revWalk.parseCommit(childCommitId)
         return commit.parents
-                .flatMap { allCommitIds(it.id, revWalk) } + commit.id
+            .filter { it.id !in visited }
+            .flatMap { allCommitIds(it.id, revWalk, visited) } + commit.id
     }
 
     fun tag(tagName: String) {
