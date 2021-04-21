@@ -23,7 +23,7 @@ class KewtVersioningPlugin : Plugin<Project> {
                 branches {
 
                     add {
-                        regexes = mutableListOf("master".toRegex())
+                        regexes = mutableListOf("master".toRegex(), "main".toRegex())
                         incrementer = Incrementer.MINOR
                         stringify = stringifier(useBranch = false, useTimestamp = false, useSha = false)
                     }

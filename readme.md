@@ -134,9 +134,9 @@ this: `v-0.0.1`. Submodules can use different tags to have independent versionin
 * `userName` and `password` used for HTTPS connection to remote repository. If value has prefix `${` and postfix `}` (string in Kotlin `"\${MY_PWD}"`) it will be resolved from environment variables.
  Could contain plain values (highly not recommended). 
 * `releaseTaskEnabled` allows turning off release task for current submodule.
-* `branches` - per branch configuration. By default, this list has two configurations: first matches master branch, the 
+* `branches` - per branch configuration. By default, this list has two configurations: first matches master (or main) branch, the 
 second matches rest of branches.
-  * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex())`. Hint: to avoid a lot 
+  * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex(), "main".toRegex())`. Hint: to avoid a lot 
   of escape symbols use triple double-quotes in Kotlin
   * `incrementer` - default incrementer for the matched branch. Default value is `Incrementer.Minor`. Could be Major, Minor, Patch. Each branch could have its own
    default version increment strategy. Master and feature branches could increment their minor versions (0.1.0 -> 0.2.0).
@@ -179,3 +179,5 @@ Parameters:
 ### Usage example
 * Kewt versioning plugin is versioned by kewt versioning plugin (see `build.gradle.kts`)
 * Using in multiproject build: https://github.com/mfarsikov/kewt
+* https://github.com/mfarsikov/kotlite
+* https://github.com/mfarsikov/kotgres

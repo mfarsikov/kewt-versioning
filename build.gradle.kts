@@ -2,8 +2,8 @@ import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 plugins {
     `java-gradle-plugin`
-    id("org.jetbrains.kotlin.jvm") version "1.4.31"
-    id("com.gradle.plugin-publish") version "0.11.0"
+    id("org.jetbrains.kotlin.jvm") version "1.4.32"
+    id("com.gradle.plugin-publish") version "0.14.0"
     id("maven-publish")
     id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
 }
@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.eclipse.jgit:org.eclipse.jgit:5.10.0.202012080955-r")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.11.0.202103091610-r")
 }
 
 gradlePlugin {
