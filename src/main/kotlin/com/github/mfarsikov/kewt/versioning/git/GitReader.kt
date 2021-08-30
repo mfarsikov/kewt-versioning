@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 class GitReader(
-        gitPath: File,
+        private val gitPath: File,
         private val remoteName: String?,
         private val user: String?,
         private val password: String?
 ) {
     private val logger = LoggerFactory.getLogger(GitReader::class.java)
-    private val git = Git.open(gitPath)
     private val tagPrefix = "refs/tags/"
 
     fun status(): GitStatus {
+        val git = Git.open(gitPath)
         val commitId = git.repository.resolve("HEAD")
         val allTags = git.tagList().call()
 
@@ -57,6 +57,8 @@ class GitReader(
     }
 
     fun tag(tagName: String) {
+         val git = Git.open(gitPath)
+
         if (git.tagList().call().any { it.name == "$tagPrefix$tagName" }) {
             println("Tag $tagName already exists. Have another gradle submodule just created it? If so, the release task can be turned of for this sub module")
         } else {
@@ -71,6 +73,7 @@ class GitReader(
 
     private fun pushToRemote(tagName: String) {
         try {
+            val git = Git.open(gitPath)
             git.push()
                     .setRemote(remoteName)
                     .setCredentialsProvider(UsernamePasswordCredentialsProvider(user, password))

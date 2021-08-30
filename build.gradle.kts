@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.32"
     id("com.gradle.plugin-publish") version "0.14.0"
     id("maven-publish")
-    id("com.github.mfarsikov.kewt-versioning") version "0.6.0"
+    id("com.github.mfarsikov.kewt-versioning") version "0.9.0"
 }
 
 group = "com.github.mfarsikov.kewt-versioning"
@@ -28,9 +28,9 @@ kewtVersioning {
                 incrementer = Incrementer.MINOR
                 stringify = { version ->
                     stringifier(
-                            useBranch = version.isSnapshot,
-                            useSha = false,
-                            useTimestamp = false
+                        useBranch = version.isSnapshot,
+                        useSha = false,
+                        useTimestamp = false
                     )(version)
                 }
             }
@@ -81,8 +81,14 @@ publishing {
     }
 }
 
+val compiler = javaToolchains.compilerFor {
+    languageVersion.set(JavaLanguageVersion.of(11))
+    vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
+        jdkHome = compiler.get().metadata.installationPath.asFile.absolutePath
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
