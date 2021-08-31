@@ -40,7 +40,7 @@ kewtVersioning {
 version = kewtVersioning.version
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
