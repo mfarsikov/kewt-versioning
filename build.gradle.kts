@@ -1,43 +1,44 @@
-import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
+//import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.4.32"
     id("com.gradle.plugin-publish") version "0.14.0"
     id("maven-publish")
-    id("com.github.mfarsikov.kewt-versioning") version "0.9.0"
+  //  id("com.github.mfarsikov.kewt-versioning") version "0.10.1"
 }
 
 group = "com.github.mfarsikov.kewt-versioning"
-kewtVersioning {
-    configuration {
-        branches {
-            clear()
-            add {
-                regexes = mutableListOf("master".toRegex())
-                incrementer = Incrementer.MINOR
-                stringify = stringifier(useBranch = false, useSha = false, useTimestamp = false)
-            }
-            add {
-                regexes = mutableListOf("fix/.*".toRegex())
-                incrementer = Incrementer.PATCH
-                stringify = stringifier(useSha = false, useTimestamp = false)
-            }
-            add {
-                regexes = mutableListOf(".*".toRegex())
-                incrementer = Incrementer.MINOR
-                stringify = { version ->
-                    stringifier(
-                        useBranch = version.isSnapshot,
-                        useSha = false,
-                        useTimestamp = false
-                    )(version)
-                }
-            }
-        }
-    }
-}
-version = kewtVersioning.version
+version = "0.10.1"
+//kewtVersioning {
+//    configuration {
+//        branches {
+//            clear()
+//            add {
+//                regexes = mutableListOf("master".toRegex())
+//                incrementer = Incrementer.MINOR
+//                stringify = stringifier(useBranch = false, useSha = false, useTimestamp = false)
+//            }
+//            add {
+//                regexes = mutableListOf("fix/.*".toRegex())
+//                incrementer = Incrementer.PATCH
+//                stringify = stringifier(useSha = false, useTimestamp = false)
+//            }
+//            add {
+//                regexes = mutableListOf(".*".toRegex())
+//                incrementer = Incrementer.MINOR
+//                stringify = { version ->
+//                    stringifier(
+//                        useBranch = version.isSnapshot,
+//                        useSha = false,
+//                        useTimestamp = false
+//                    )(version)
+//                }
+//            }
+//        }
+//    }
+//}
+//version = kewtVersioning.version
 
 repositories {
     jcenter()
@@ -82,7 +83,7 @@ publishing {
 }
 
 val compiler = javaToolchains.compilerFor {
-    languageVersion.set(JavaLanguageVersion.of(11))
+    languageVersion.set(JavaLanguageVersion.of(8))
     vendor.set(JvmVendorSpec.ADOPTOPENJDK)
 }
 
@@ -91,6 +92,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         jdkHome = compiler.get().metadata.installationPath.asFile.absolutePath
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
+        sourceCompatibility = "1.8"
     }
 }
 
