@@ -1,44 +1,43 @@
-//import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
+import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.4.32"
     id("com.gradle.plugin-publish") version "0.14.0"
     id("maven-publish")
-  //  id("com.github.mfarsikov.kewt-versioning") version "0.10.2"
+    id("com.github.mfarsikov.kewt-versioning") version "0.10.2"
 }
 
 group = "com.github.mfarsikov.kewt-versioning"
-version = "0.10.2"
-//kewtVersioning {
-//    configuration {
-//        branches {
-//            clear()
-//            add {
-//                regexes = mutableListOf("master".toRegex())
-//                incrementer = Incrementer.MINOR
-//                stringify = stringifier(useBranch = false, useSha = false, useTimestamp = false)
-//            }
-//            add {
-//                regexes = mutableListOf("fix/.*".toRegex())
-//                incrementer = Incrementer.PATCH
-//                stringify = stringifier(useSha = false, useTimestamp = false)
-//            }
-//            add {
-//                regexes = mutableListOf(".*".toRegex())
-//                incrementer = Incrementer.MINOR
-//                stringify = { version ->
-//                    stringifier(
-//                        useBranch = version.isSnapshot,
-//                        useSha = false,
-//                        useTimestamp = false
-//                    )(version)
-//                }
-//            }
-//        }
-//    }
-//}
-//version = kewtVersioning.version
+kewtVersioning {
+    configuration {
+        branches {
+            clear()
+            add {
+                regexes = mutableListOf("master".toRegex())
+                incrementer = Incrementer.MINOR
+                stringify = stringifier(useBranch = false, useSha = false, useTimestamp = false)
+            }
+            add {
+                regexes = mutableListOf("fix/.*".toRegex())
+                incrementer = Incrementer.PATCH
+                stringify = stringifier(useSha = false, useTimestamp = false)
+            }
+            add {
+                regexes = mutableListOf(".*".toRegex())
+                incrementer = Incrementer.MINOR
+                stringify = { version ->
+                    stringifier(
+                        useBranch = version.isSnapshot,
+                        useSha = false,
+                        useTimestamp = false
+                    )(version)
+                }
+            }
+        }
+    }
+}
+version = kewtVersioning.version
 
 repositories {
     jcenter()
