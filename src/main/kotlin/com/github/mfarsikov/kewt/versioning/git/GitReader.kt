@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 class GitReader(
-        private val gitPath: File,
-        private val remoteName: String?,
-        private val user: String?,
-        private val password: String?
+    private val gitPath: File,
+    private val remoteName: String?,
+    private val user: String?,
+    private val password: String?
 ) {
     private val logger = LoggerFactory.getLogger(GitReader::class.java)
     private val tagPrefix = "refs/tags/"
@@ -22,23 +22,31 @@ class GitReader(
         val commitId = git.repository.resolve("HEAD")
         val allTags = git.tagList().call()
 
-        val commitIds = RevWalk(git.repository).use {
-            allCommitIds(commitId, it).toSet()
-        }
+        val revWalk = RevWalk(git.repository)
+        val commitIds = allCommitIds(commitId, revWalk).toSet()
+
 
         val branchTags = allTags
-                .filter { it.objectId in commitIds }
-                .map { it.name.substringAfter(tagPrefix) }
+            .filter {
+                it.objectId in commitIds || try {
+                    revWalk.parseTag(it.objectId).`object`.id in commitIds
+                } catch (ex: Exception) {
+                    false
+                }
+            }
+            .map { it.name.substringAfter(tagPrefix) }
+
+        revWalk.close()
 
         val commitTags = allTags.filter { it.objectId == commitId }.map { it.name.substringAfter(tagPrefix) }
         val isDirty = git.status().call().isClean.not()
 
         return GitStatus(
-                branch = git.repository.branch.takeIf { it != commitId.name  },
-                branchTags = branchTags,
-                isDirty = isDirty,
-                commitTags = commitTags,
-                sha = commitId.name
+            branch = git.repository.branch.takeIf { it != commitId.name },
+            branchTags = branchTags,
+            isDirty = isDirty,
+            commitTags = commitTags,
+            sha = commitId.name
         ).also {
             logger.debug("Git status: $it")
         }
@@ -57,7 +65,7 @@ class GitReader(
     }
 
     fun tag(tagName: String) {
-         val git = Git.open(gitPath)
+        val git = Git.open(gitPath)
 
         if (git.tagList().call().any { it.name == "$tagPrefix$tagName" }) {
             println("Tag $tagName already exists. Have another gradle submodule just created it? If so, the release task can be turned of for this sub module")
@@ -75,10 +83,10 @@ class GitReader(
         try {
             val git = Git.open(gitPath)
             git.push()
-                    .setRemote(remoteName)
-                    .setCredentialsProvider(UsernamePasswordCredentialsProvider(user, password))
-                    .add(tagName)
-                    .call()
+                .setRemote(remoteName)
+                .setCredentialsProvider(UsernamePasswordCredentialsProvider(user, password))
+                .add(tagName)
+                .call()
         } catch (e: TransportException) {
             if (e.message == "not authorized") {
                 logger.error("Check kewtVersioning.user and kewtVersioning.password")

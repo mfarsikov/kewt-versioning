@@ -41,8 +41,7 @@ class KewtVersioningPlugin : Plugin<Project> {
             it.group = "Versioning"
             it.description = "Print current version to console"
             it.doLast {
-                val versionCalculator = calculator(project)
-                println("version: ${versionCalculator.currentVersionString()}")
+                println(calculator(project).currentVersionString())
             }
         }
 
