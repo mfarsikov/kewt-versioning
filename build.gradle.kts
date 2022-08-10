@@ -2,7 +2,7 @@ import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 plugins {
     `java-gradle-plugin`
-    id("org.jetbrains.kotlin.jvm") version "1.4.32"
+    id("org.jetbrains.kotlin.jvm") version "1.7.10"
     id("com.gradle.plugin-publish") version "0.14.0"
     id("maven-publish")
     id("com.github.mfarsikov.kewt-versioning") version "1.0.0"
@@ -81,17 +81,16 @@ publishing {
     }
 }
 
-val compiler = javaToolchains.compilerFor {
-    languageVersion.set(JavaLanguageVersion.of(8))
-    vendor.set(JvmVendorSpec.ADOPTOPENJDK)
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jdkHome = compiler.get().metadata.installationPath.asFile.absolutePath
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
-        sourceCompatibility = "1.8"
     }
 }
 
