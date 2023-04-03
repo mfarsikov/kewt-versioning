@@ -64,7 +64,7 @@ kewtVersioning.configuration {
         add {
             regexes = mutableListOf("master".toRegex())
             incrementer = Incrementer.MINOR // default
-            stringify = stingifier(
+            stringify = stringifier(
                 useBranch = false,  // by default: true
                 useSnapshot = true, // default
                 useDirty = true, // default
@@ -75,7 +75,7 @@ kewtVersioning.configuration {
         }
         add {
             regexes = mutableListOf(".*".toRegex())
-            stringify = stingifier(
+            stringify = stringifier(
                 useTimestamp = false,
                 useSha = false
             )
