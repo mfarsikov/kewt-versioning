@@ -3,6 +3,7 @@ package com.github.mfarsikov.kewt.versioning.plugin.configDsl
 import com.github.mfarsikov.kewt.versioning.plugin.BranchConfig
 import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 import com.github.mfarsikov.kewt.versioning.plugin.KewtConfiguration
+import com.github.mfarsikov.kewt.versioning.plugin.Versioning
 import com.github.mfarsikov.kewt.versioning.version.DetailedVersion
 import com.github.mfarsikov.kewt.versioning.version.Stringifier
 import java.io.File
@@ -53,12 +54,12 @@ class BranchConfigDsl(val delegate: BranchConfig) : IBranchConfig by delegate {
 interface IKewtConfiguration {
     var gitPath: File
     var prefix: String
-    var separator: String
     var remoteName: String
     var userName: String
     var password: String
     var releaseTaskEnabled: Boolean
     var branches: MutableList<BranchConfig>
+    var versioning: Versioning
 }
 
 interface IBranchConfig {

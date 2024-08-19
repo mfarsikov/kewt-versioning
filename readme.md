@@ -101,6 +101,7 @@ kewtVersioning.groovyConfigurationDsl {
     userName = '${GITHUB_USER_NAME}' // default
     password = '${GITHUB_PASSWORD}' // default
     releaseTaskEnabled = true // default
+    versioning = SEMANTIC // default, can be INCREMENTAL
     branches {
         clear()
         add {
@@ -175,6 +176,9 @@ Parameters:
 | `useTimestamp = true`                   | `0.4.0-master-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
 | `useTimestamp = false, useSha = false`  | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT`                                                   | `0.4.0-master-SNAPSHOT-dirty`                                                  |
 </details>
+
+### Incremental versioning
+If there is no need to use complex major/minor/patch semantic versioning, INCREMENTAL versioning can be configured. In this case version consist of a single number, and it is treated as `major` one.
 
 ### Usage example
 * Kewt versioning plugin is versioned by kewt versioning plugin (see `build.gradle.kts`)
