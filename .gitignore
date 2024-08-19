@@ -3,3 +3,4 @@ build
 .idea
 .gradletasknamecache
 out
+.DS_Store
