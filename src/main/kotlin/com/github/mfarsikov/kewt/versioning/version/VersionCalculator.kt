@@ -3,7 +3,6 @@ package com.github.mfarsikov.kewt.versioning.version
 import com.github.mfarsikov.kewt.versioning.git.GitReader
 import com.github.mfarsikov.kewt.versioning.plugin.BranchConfig
 import com.github.mfarsikov.kewt.versioning.plugin.KewtConfiguration
-import com.github.mfarsikov.kewt.versioning.plugin.ReleaseType
 import com.github.mfarsikov.kewt.versioning.plugin.Versioning
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -82,27 +81,6 @@ class VersionCalculator(
         .filter { it.startsWith(config.prefix) && it.substringAfter(config.prefix) matches incrementalVersionRegex }
         .maxOfOrNull { extractIncrementalVersion(it.substringAfter(config.prefix)) }
     }
-
-  fun release(releaseType: ReleaseType) {
-
-    //TODO sanityCheck
-    val detailedVersion = currentVersion()
-
-    if (detailedVersion.isDirty) {
-      throw RuntimeException("Cannot release if there are uncommitted changes")
-    }
-
-    val incrementer = when (releaseType) {
-      ReleaseType.MAJOR -> Incrementer.Major
-      ReleaseType.MINOR -> Incrementer.Minor
-      ReleaseType.PATCH -> Incrementer.Patch
-      ReleaseType.DEFAULT -> detailedVersion.incrementer
-    }
-
-    val newVersion = incrementer.increment(detailedVersion.lastSpecifiedVersion)
-
-    gitReader.tag("${config.prefix}$newVersion")
-  }
 
   private fun extractSemanticVersion(version: String): Version.SemanticVersion = version.split(".")
     .map { it.toInt() }

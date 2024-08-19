@@ -17,7 +17,6 @@ class KewtVersioningPlugin : Plugin<Project> {
                 remoteName = "origin"
                 userName = "\${GITHUB_USER_NAME}"
                 password = "\${GITHUB_PASSWORD}"
-                releaseTaskEnabled = true
                 branches {
 
                     add {
@@ -41,51 +40,6 @@ class KewtVersioningPlugin : Plugin<Project> {
             it.doLast {
                 println(calculator(project).currentVersionString())
             }
-        }
-
-        project.tasks.register("release") {
-            it.group = "Versioning"
-            it.description = "Create next tag in git using configuration, and push it to remote if configured"
-            it.doLast {
-                when(project.extensions.findByType(KewtVersioningExtension::class.java)!!.configuration.versioning){
-                    Versioning.SEMANTIC -> release(it.project, ReleaseType.DEFAULT)
-                    Versioning.INCREMENTAL -> release(it.project, ReleaseType.MAJOR)
-                }
-            }
-        }
-
-        project.tasks.register("releaseMajor") {
-            it.group = "Versioning"
-            it.description = "Create next tag in git increasing a major version, and push it to remote if configured"
-            it.doLast {
-                release(it.project, ReleaseType.MAJOR)
-            }
-        }
-
-        project.tasks.register("releaseMinor") {
-            it.group = "Versioning"
-            it.description = "Create next tag in git increasing a minor version, and push it to remote if configured"
-            it.doLast {
-                if(project.extensions.findByType(KewtVersioningExtension::class.java)!!.configuration.versioning == Versioning.INCREMENTAL)
-                    error("Only major version can be released for INCREMENTAL versioning")
-                release(it.project, ReleaseType.MINOR)
-            }
-        }
-
-        project.tasks.register("releasePatch") {
-            it.group = "Versioning"
-            it.description = "Create next tag in git increasing a patch version, and push it to remote if configured"
-            it.doLast {
-                if(project.extensions.findByType(KewtVersioningExtension::class.java)!!.configuration.versioning == Versioning.INCREMENTAL)
-                    error("Only major version can be released for INCREMENTAL versioning")
-                release(it.project, ReleaseType.PATCH)
-            }
-        }
-    }
-
-    private fun release(project: Project, type: ReleaseType) {
-        if (project.extensions.findByType(KewtVersioningExtension::class.java)!!.configuration.releaseTaskEnabled) {
-            calculator(project).release(type)
         }
     }
 
@@ -112,5 +66,3 @@ class KewtVersioningPlugin : Plugin<Project> {
         }
     }
 }
-
-enum class ReleaseType { MAJOR, MINOR, PATCH, DEFAULT }

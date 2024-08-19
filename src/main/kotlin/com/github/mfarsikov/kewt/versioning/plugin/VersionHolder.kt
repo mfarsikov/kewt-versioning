@@ -1,6 +1,5 @@
 package com.github.mfarsikov.kewt.versioning.plugin
 
-import com.github.mfarsikov.kewt.versioning.version.VersionCalculator
 import org.gradle.api.Project
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream

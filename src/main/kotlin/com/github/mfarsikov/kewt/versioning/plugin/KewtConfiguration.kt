@@ -12,7 +12,6 @@ class KewtConfiguration : IKewtConfiguration {
     override var remoteName: String by Delegates.notNull()
     override var userName: String by Delegates.notNull()
     override var password: String by Delegates.notNull()
-    override var releaseTaskEnabled: Boolean by Delegates.notNull()
     override var branches: MutableList<BranchConfig> = mutableListOf()
     override var versioning: Versioning = Versioning.SEMANTIC
 }

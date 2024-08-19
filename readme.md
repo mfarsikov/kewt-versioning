@@ -34,11 +34,7 @@ version = kewtVersioning.version
 </details>
 
 ## Tasks
-* `release` create next tag in Git (according to branch configuration) and pushes it to `remoteName = "origin"` remote repository.
 * `currentVersion` prints current version.
-* `releaseMajor`, `releaseMinor`,`releasePatch` create new tag in git increasing appropriate version. 
-Ignores branch configurations (`releaseMajor` increases major version even if for current branch default incrementer is 
-Patch).
 
 ## Configuration
 This is default configuration. It includes two pre-configured branches: `master` and all other (`.*`).
@@ -53,12 +49,10 @@ import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 kewtVersioning.configuration {
     gitPath = project.rootDir  // default
-    prefix = "v" // default
-    separator = "-" // default
+    prefix = "v-" // default
     remoteName = "origin" // default
     userName = "\${GITHUB_USER_NAME}" // default
     password = "\${GITHUB_PASSWORD}" // default
-    releaseTaskEnabled = true // default
     branches {
         clear()
         add {
@@ -100,7 +94,6 @@ kewtVersioning.groovyConfigurationDsl {
     remoteName = 'origin' // default
     userName = '${GITHUB_USER_NAME}' // default
     password = '${GITHUB_PASSWORD}' // default
-    releaseTaskEnabled = true // default
     versioning = SEMANTIC // default, can be INCREMENTAL
     branches {
         clear()
@@ -129,12 +122,12 @@ kewtVersioning.groovyConfigurationDsl {
 </details>
 
 * `gitPath` - path to `.git` folder. Default is project root `gitPath=project.rootDir`.
-* `prefix` and `separator` - are used for Git tags. By default `prefix="v"` and `separator="-"`. Tags look like 
+* `prefix` - is used for Git tags. By default `prefix="v-"`. Tags look like 
 this: `v-0.0.1`. Submodules can use different tags to have independent versioning. 
 * `remoteName` remote repository name. Default is `"origin"`. To prevent pushing tags to remote could be reset to `null`
 * `userName` and `password` used for HTTPS connection to remote repository. If value has prefix `${` and postfix `}` (string in Kotlin `"\${MY_PWD}"`) it will be resolved from environment variables.
  Could contain plain values (highly not recommended). 
-* `releaseTaskEnabled` allows turning off release task for current submodule.
+* `versioning` - could be one of `[SEMANTIC | INCREMENTAL]`. Semantic uses 3 digit version (`v-1.2.3`) whereas incremental only one (`v-1`)
 * `branches` - per branch configuration. By default, this list has two configurations: first matches master (or main) branch, the 
 second matches rest of branches.
   * `regexes` - list of regexes for branch names. Default is `mutableListOf("master".toRegex(), "main".toRegex())`. Hint: to avoid a lot 

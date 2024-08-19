@@ -57,7 +57,6 @@ interface IKewtConfiguration {
     var remoteName: String
     var userName: String
     var password: String
-    var releaseTaskEnabled: Boolean
     var branches: MutableList<BranchConfig>
     var versioning: Versioning
 }
