@@ -185,3 +185,10 @@ If there is no need to use complex major/minor/patch semantic versioning, INCREM
 * Using in multiproject build: https://github.com/mfarsikov/kewt
 * https://github.com/mfarsikov/kotlite
 * https://github.com/mfarsikov/kotgres
+
+### Compatibility
+
+| kewt versioning | JVM | Gradle |
+|-----------------|-----|--------|
+| v-1.0.0         | 17  | 7.5    |
+| v-1.2.0         | 21  | 8.10   |
