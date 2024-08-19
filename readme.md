@@ -53,6 +53,7 @@ kewtVersioning.configuration {
     remoteName = "origin" // default
     userName = "\${GITHUB_USER_NAME}" // default
     password = "\${GITHUB_PASSWORD}" // default
+    versioning = SEMANTIC // default, can be INCREMENTAL
     branches {
         clear()
         add {
@@ -89,8 +90,7 @@ import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
 
 kewtVersioning.groovyConfigurationDsl {
     gitPath = project.rootDir  // default
-    prefix = 'v' // default
-    separator = '-' // default
+    prefix = 'v-' // default
     remoteName = 'origin' // default
     userName = '${GITHUB_USER_NAME}' // default
     password = '${GITHUB_PASSWORD}' // default
