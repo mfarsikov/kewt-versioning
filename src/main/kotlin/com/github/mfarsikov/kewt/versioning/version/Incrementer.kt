@@ -12,19 +12,18 @@ sealed class Incrementer {
   }
 
   object Minor : Incrementer() {
-    override fun increment(version: Version) =
+    override fun increment(version: Version): Version =
       when (version) {
         is Version.SemanticVersion -> Version.SemanticVersion(version.major, version.minor + 1, 0)
-        is Version.IncrementalVersion -> error("Incremental version can increment only major version")
+        is Version.IncrementalVersion -> Version.IncrementalVersion(version.version + 1)
       }
-
   }
 
   object Patch : Incrementer() {
     override fun increment(version: Version): Version =
       when (version) {
         is Version.SemanticVersion -> Version.SemanticVersion(version.major, version.minor, version.patch + 1)
-        is Version.IncrementalVersion -> error("Incremental version can increment only major version")
+        is Version.IncrementalVersion -> Version.IncrementalVersion(version.version + 1)
       }
   }
 
