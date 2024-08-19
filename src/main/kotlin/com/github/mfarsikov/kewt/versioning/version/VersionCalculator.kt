@@ -16,6 +16,8 @@ class VersionCalculator(
 
   companion object {
     private val logger: Logger = LoggerFactory.getLogger(VersionCalculator::class.java)
+    private val incrementalVersionRegex = "\\d+".toRegex()
+    private val semanticVersionRegex  = "\\d+\\.\\d+\\.\\d+".toRegex()
   }
 
   fun currentVersionString(): String {
@@ -73,11 +75,11 @@ class VersionCalculator(
   private fun version(tags: List<String>, versioning: Versioning): Version? =
     when(versioning) {
       Versioning.SEMANTIC -> tags
-        .filter { it.startsWith(config.prefix) }
+        .filter { it.startsWith(config.prefix)  && it.substringAfter(config.prefix) matches semanticVersionRegex }
         .maxOfOrNull { extractSemanticVersion(it.substringAfter(config.prefix)) }
 
       Versioning.INCREMENTAL -> tags
-        .filter { it.startsWith(config.prefix) }
+        .filter { it.startsWith(config.prefix) && it.substringAfter(config.prefix) matches incrementalVersionRegex }
         .maxOfOrNull { extractIncrementalVersion(it.substringAfter(config.prefix)) }
     }
 
