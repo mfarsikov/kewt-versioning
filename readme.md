@@ -42,7 +42,6 @@ kewtVersioning.configuration {
     password = "\${GITHUB_PASSWORD}" // default
     versioning = SEMANTIC // default, can be INCREMENTAL
     branches {
-        clear()
         add {
             regexes = mutableListOf("master".toRegex())
             incrementer = Incrementer.MINOR // default
@@ -98,7 +97,7 @@ Parameters:
 * `useDirty` if true (default) and there are uncommitted changes, then version includes `-dirty` suffix
 * `useSha` if null (default) version includes commit SHA if it is a snapshot. If true version always includes commit SHA
 * `useTimestamp` if null (default) version includes timestamp if it is dirty. If true version always includes timestamp
-* `timeZone` time zone used in timestamp. Default value is system default. Most likely alternative is `jata.time.ZoneOffset.UTC`
+* `timeZone` time zone used in timestamp. Default value is UTC.
 
 <details>
 <summary>Examples for configurations and output</summary> 
@@ -107,12 +106,12 @@ Parameters:
 
 |                                         | Released (the tag is present on current commit)           | Snapshot (current commit is ahead of tag)                                 | Dirty (uncommitted changes)                                                                         |
 |---------                                |--------------                                             |-----------------------------------------------------------                |--------------------------------------------------------------------------------|
-| default                                 | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`|
-| `useBranch = false`                     | `0.4.0`                                                   | `0.4.0-SNAPSHOT-dbef6a`                                                   | `0.4.0-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`       |
-| `useSnapshot = false`                   | `0.4.0-master`                                            | `0.4.0-master-dbef6a`                                                     | `0.4.0-master-dbef6a-dirty-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`         |
-| `useDirty = false`                      | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
-| `useSha = true`                         | `0.4.0-master-dbef6a`                                     | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
-| `useTimestamp = true`                   | `0.4.0-master-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771+03-00[Europe-Kiev]`      |
+| default                                 | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771`|
+| `useBranch = false`                     | `0.4.0`                                                   | `0.4.0-SNAPSHOT-dbef6a`                                                   | `0.4.0-SNAPSHOT-dbef6a-dirty-2020-05-16T20-34-46.771`       |
+| `useSnapshot = false`                   | `0.4.0-master`                                            | `0.4.0-master-dbef6a`                                                     | `0.4.0-master-dbef6a-dirty-2020-05-16T20-34-46.771`         |
+| `useDirty = false`                      | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771`      |
+| `useSha = true`                         | `0.4.0-master-dbef6a`                                     | `0.4.0-master-SNAPSHOT-dbef6a`                                            | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771`      |
+| `useTimestamp = true`                   | `0.4.0-master-2020-05-16T20-34-46.771` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771` | `0.4.0-master-SNAPSHOT-dbef6a-2020-05-16T20-34-46.771`      |
 | `useTimestamp = false, useSha = false`  | `0.4.0-master`                                            | `0.4.0-master-SNAPSHOT`                                                   | `0.4.0-master-SNAPSHOT-dirty`                                                  |
 </details>
 
