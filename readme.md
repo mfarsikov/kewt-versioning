@@ -20,19 +20,6 @@ version = kewtVersioning.version
 ```                                   
 </details>
 
-<details>
-<summary>Groovy</summary>
-
-`build.gradle`
-
-```groovy
-plugins {
-    id 'com.github.mfarsikov.kewt-versioning' version '1.0.0'
-}
-version = kewtVersioning.version
-```        
-</details>
-
 ## Tasks
 * `currentVersion` prints current version.
 
@@ -74,47 +61,6 @@ kewtVersioning.configuration {
                 useTimestamp = false,
                 useSha = false
             )
-        }
-    }
-}
-```
-</details>
-
-<details>
-<summary>Groovy</summary>
-
-`build.gradle`:
-
-```groovy
-import com.github.mfarsikov.kewt.versioning.plugin.Incrementer
-
-kewtVersioning.groovyConfigurationDsl {
-    gitPath = project.rootDir  // default
-    prefix = 'v-' // default
-    remoteName = 'origin' // default
-    userName = '${GITHUB_USER_NAME}' // default
-    password = '${GITHUB_PASSWORD}' // default
-    versioning = SEMANTIC // default, can be INCREMENTAL
-    branches {
-        clear()
-        add {
-            regexes = [~'master']
-            incrementer = Incrementer.MINOR // default
-            stringify = stringifier([
-                    useBranch: false,  // by default: true
-                    useSnapshot: true, // default
-                    useDirty: true, // default
-                    useSha: false,  // by default: null
-                    useTimestamp: false, // by default: null
-                    useUtc: false //Default
-            ])
-        }
-        add {
-            regexes = [~'.*']
-            stringify = stringifier([
-                    useTimestamp: false,
-                    useSha: false
-            ])
         }
     }
 }

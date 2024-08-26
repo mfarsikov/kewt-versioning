@@ -16,6 +16,7 @@ annotation class KewtConfigDsl
 @KewtConfigDsl
 class KewtConfigurationDsl(val delegate: KewtConfiguration) : IKewtConfiguration by delegate {
     fun branches(block: BranchConfigListBlock.() -> Unit) {
+        delegate.branches.clear()
         BranchConfigListBlock(delegate.branches).block()
     }
 }
