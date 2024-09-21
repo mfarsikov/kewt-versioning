@@ -14,7 +14,7 @@ Project versioning using Git tags with type safe Gradle Kotlin DSL.
 
 ```kotlin
 plugins {
-    id("com.github.mfarsikov.kewt-versioning") version "1.0.0"
+    id("com.github.mfarsikov.kewt-versioning") version "1.5.0"
 }
 version = kewtVersioning.version
 ```                                   

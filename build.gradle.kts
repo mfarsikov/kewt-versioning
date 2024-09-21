@@ -5,7 +5,7 @@ plugins {
   id("org.jetbrains.kotlin.jvm") version "2.0.20"
   id("com.gradle.plugin-publish") version "1.3.0"
   id("maven-publish")
-  id("com.github.mfarsikov.kewt-versioning") version "1.4.0"
+  id("com.github.mfarsikov.kewt-versioning") version "1.5.0"
 }
 
 group = "com.github.mfarsikov.kewt-versioning"
